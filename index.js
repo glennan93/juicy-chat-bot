@@ -32,8 +32,10 @@ class Bot {
     return this.render(this.greeting, token)
   }
 
-  addUser (token, name) {
-    this.factory.run(`users.addUser("${token}", "${name}")`)
+  addUser(token, name) {
+    const sanitizedToken = sanitizeInput(token);
+    const sanitizedName = sanitizeInput(name);
+    this.factory.run(`users.addUser("${sanitizedToken}", "${sanitizedName}")`);
   }
 
   getUser (token) {
@@ -59,6 +61,11 @@ class Bot {
   train () {
     return this.factory.run('train()')
   }
+}
+
+function sanitizeInput(input) {
+  // Basic, replace with a more robust solution if needed
+  return input.replace(/[^a-zA-Z0-9 ]/g, ''); // Strips out characters except alphanumeric and space 
 }
 
 exports.Bot = Bot
